@@ -16,7 +16,7 @@ class RosterViewerController(
 ) {
 
     @PostMapping(consumes = ["multipart/form-data"], produces = ["application/json"])
-    fun retrieveRosters(@RequestParam("file") file: MultipartFile): ResponseEntity<Map<String, String>> {
+    fun retrieveRosters(@RequestParam("file") file: MultipartFile): ResponseEntity<Map<String, List<String>>> {
         val response = rosterViewerService.extractTextFromPdf(file)
         return ResponseEntity.ok(response)
     }

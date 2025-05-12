@@ -1,17 +1,19 @@
 package com.application.rosterviewer.service
 
-import com.application.rosterviewer.model.Shift
-import com.application.rosterviewer.utils.PDFUtils
+import com.application.rosterviewer.transformer.ShiftTransformer
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 
 @Service
-class RosterViewerService {
+class RosterViewerService(
+    private val shiftTransformer: ShiftTransformer
+) {
 
-    fun extractTextFromPdf(request: MultipartFile): Map<String, String> {
+    fun extractTextFromPdf(request: MultipartFile): Map<String, List<String>> {
         val file = multipartToTempFile(request)
-        return PDFUtils.extractShifts(file)
+        val people = shiftTransformer.extractPeople(file)
+        return mapOf("people" to people)
     }
 
     private fun multipartToTempFile(multipart: MultipartFile): File {
